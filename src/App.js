@@ -10,22 +10,33 @@ class App extends Component {
     textSize: 0
   }
 
-  setText = (event) => {
+  setText = (text) => {
     this.setState({
-      text: event.target.value,
-      textSize: event.target.value.length
+      text: text,
+      textSize: text.length
     })
+  }
+
+  getTextAsArray = () => {
+    return this.state.text.split('')
+  }
+
+  removeTextChar = (index) => {
+    const textAsArray = this.getTextAsArray()
+    textAsArray.splice(index, 1)
+    const text = textAsArray.join('')
+    this.setText(text)
   }
   
   render = () => {
     let charComponents = null
     if (this.state.textSize > 0) {
-      let textAsArray = this.state.text.split('')
-      charComponents = textAsArray.map((char, index) => {
+      charComponents = this.getTextAsArray().map((char, index) => {
         return (
           <Char
             key={index}
             char={char}
+            click={() => this.removeTextChar(index)}
           />
         )
       })
@@ -41,7 +52,7 @@ class App extends Component {
           <li>When you click a CharComponent, it should be removed from the entered text.</li>
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
-        <input type="text" value={this.state.text} onChange={event => {this.setText(event)}}/>
+        <input type="text" value={this.state.text} onChange={event => {this.setText(event.target.value)}}/>
         <p>{ this.state.textSize }</p>
         <Validation textLength={this.state.textSize}/>
         {charComponents}
