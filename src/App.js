@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Validation from './Validation/Validation'
+import Char from './Char/Char'
 import './App.css';
 
 class App extends Component {
@@ -17,6 +18,18 @@ class App extends Component {
   }
   
   render = () => {
+    let charComponents = null
+    if (this.state.textSize > 0) {
+      let textAsArray = this.state.text.split('')
+      charComponents = textAsArray.map((char, index) => {
+        return (
+          <Char
+            key={index}
+            char={char}
+          />
+        )
+      })
+    }
     return (
       <div className="App">
         <ol>
@@ -31,6 +44,7 @@ class App extends Component {
         <input type="text" value={this.state.text} onChange={event => {this.setText(event)}}/>
         <p>{ this.state.textSize }</p>
         <Validation textLength={this.state.textSize}/>
+        {charComponents}
       </div>
     );
   }
